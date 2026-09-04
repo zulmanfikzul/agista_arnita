@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Untuk Kamu yang Spesial 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;1,600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { overflow-x: hidden; }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a0033 0%, #3d0a4a 40%, #6b1d5e 100%);
+    color: #fff;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* Hati berterbangan di background */
+  .hearts-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .heart {
+    position: absolute;
+    bottom: -50px;
+    font-size: 20px;
+    animation: floatUp linear infinite;
+    opacity: 0.7;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Tombol Musik */
+  .music-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6b9d, #c44569);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 20px rgba(255,107,157,0.5);
+    transition: all 0.3s ease;
+  }
+  .music-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(255,107,157,0.7);
+  }
+  .music-btn.playing {
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 5px 20px rgba(255,107,157,0.5); }
+    50% { box-shadow: 0 5px 30px rgba(255,107,157,0.9), 0 0 0 10px rgba(255,107,157,0.1); }
+  }
+
+  /* Halaman pembuka */
+  .intro {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #2d0a3d, #0a0015);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    transition: opacity 1s ease, visibility 1s ease;
+  }
+  .intro.hidden { opacity: 0; visibility: hidden; }
+  .intro h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    background: linear-gradient(45deg, #ff9ec7, #ffd4e5, #ff7eb3);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 0 20px;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+   .intro h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    background: linear-gradient(45deg, #e70865, #ed0909, #ff7eb3);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 0 20px;
+    animation: glow 2s ease-in-out infinite alternate;
+   }
+  @keyframes glow {
+    from { filter: drop-shadow(0 0 10px rgba(255,126,179,0.5)); }
+    to { filter: drop-shadow(0 0 25px rgba(255,126,179,0.9)); }
+  }
+  .intro p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    opacity: 0.85;
+    text-align: center;
+    padding: 0 20px;
+  }
+  .open-btn {
+    padding: 15px 45px;
+    font-size: 1.1rem;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(45deg, #ff6b9d, #c44569);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(255,107,157,0.4);
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+  }
+  .open-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(255,107,157,0.6);
+  }
+
+  /* Konten utama */
+  .main {
+    position: relative;
+    z-index: 2;
+    padding: 60px 20px;
+    display: none;
+  }
+  .main.show { display: block; animation: fadeIn 1.5s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .section {
+    max-width: 1000px;
+    margin: 0 auto 80px;
+    text-align: center;
+  }
+
+  .title {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    background: linear-gradient(45deg, #ffb6d5, #ff7eb3);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 30px;
+  }
+
+  .message {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: #f5e6f0;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    padding: 40px 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,158,199,0.2);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  }
+  .message .typewriter { min-height: 100px; }
+  .cursor {
+    display: inline-block;
+    width: 2px;
+    background: #ff9ec7;
+    animation: blink 0.8s infinite;
+    margin-left: 2px;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ====== GALERI FOTO + 4 STYLE FRAME ====== */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 35px;
+    margin-top: 30px;
+  }
+
+  .photo {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.4s ease;
+  }
+  .photo:hover { transform: translateY(-8px); }
+  .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .photo:hover img { transform: scale(1.05); }
+
+  /* FRAME 1: POLAROID - Klasik & Romantis */
+  .frame-polaroid {
+    background: #fff;
+    padding: 15px 15px 60px 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1);
+    transform: rotate(-2deg);
+    transition: transform 0.4s ease;
+  }
+  .frame-polaroid:hover { transform: rotate(0deg) translateY(-8px); }
+  .frame-polaroid .caption {
+    position: absolute;
+    bottom: 15px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.4rem;
+    color: #5a3a4a;
+  }
+  .frame-polaroid::before {
+    content: '📸';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffd700;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+  }
+
+  /* FRAME 2: EMAS ORNATE - Mewah & Elegan */
+  .frame-ornate {
+    padding: 15px;
+    background: linear-gradient(135deg, #d4af37, #f4e5a1, #d4af37);
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(212,175,55,0.4), inset 0 0 0 2px #8b6914;
+  }
+  .frame-ornate::before,
+  .frame-ornate::after {
+    content: '❦';
+    position: absolute;
+    font-size: 1.8rem;
+    color: #8b6914;
+    background: #f4e5a1;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .frame-ornate::before { top: -10px; left: -10px; }
+  .frame-ornate::after { bottom: -10px; right: -10px; }
+  .frame-ornate .caption {
+    position: absolute;
+    bottom: -35px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #ffd700;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  }
+
+  /* FRAME 3: HATI - Lucu & Manis */
+  .frame-hearts {
+    padding: 12px;
+    background: linear-gradient(135deg, #ff9ec7, #ff6b9d);
+    border-radius: 20px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(255,107,157,0.5);
+  }
+  .frame-hearts::before,
+  .frame-hearts::after,
+  .frame-hearts .corner-tl,
+  .frame-hearts .corner-br {
+    position: absolute;
+    font-size: 1.5rem;
+    z-index: 2;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  }
+  .frame-hearts::before { content: '💖'; top: -15px; left: -15px; }
+  .frame-hearts::after { content: '💖'; bottom: -15px; right: -15px; }
+  .frame-hearts .corner-tl { content: '💗'; top: -15px; right: -15px; }
+  .frame-hearts .corner-br { content: '💗'; bottom: -15px; left: -15px; }
+  .frame-hearts .caption {
+    position: absolute;
+    bottom: -40px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3rem;
+    color: #ffb6d5;
+  }
+
+  /* FRAME 4: VINTAGE - Klasik & Nostalgik */
+  .frame-vintage {
+    padding: 18px;
+    background: #2a1a1f;
+    border: 3px double #d4af37;
+    border-radius: 5px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(212,175,55,0.2);
+  }
+  .frame-vintage::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(212,175,55,0.5);
+    pointer-events: none;
+  }
+  .frame-vintage::after {
+    content: '✦';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #d4af37;
+    font-size: 1.5rem;
+    background: #2a1a1f;
+    padding: 0 10px;
+  }
+  .frame-vintage .caption {
+    position: absolute;
+    bottom: -35px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: #d4af37;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Kado virtual */
+  .gift-section { margin-top: 60px; }
+  .gift-box {
+    width: 180px;
+    height: 180px;
+    margin: 30px auto;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  .gift-box:hover { transform: scale(1.1); }
+  .gift-body {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #ff6b9d, #c44569);
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(196,69,105,0.5);
+  }
+  .gift-ribbon-v {
+    position: absolute;
+    width: 25px; height: 100%;
+    background: #ffd700;
+    left: 50%; transform: translateX(-50%);
+  }
+  .gift-ribbon-h {
+    position: absolute;
+    width: 100%; height: 25px;
+    background: #ffd700;
+    top: 50%; transform: translateY(-50%);
+  }
+  .gift-lid {
+    position: absolute;
+    width: 110%; height: 30px;
+    background: linear-gradient(135deg, #ff85ad, #d4568a);
+    top: -20px; left: -5%;
+    border-radius: 8px;
+    transition: transform 0.6s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  }
+  .gift-bow {
+    position: absolute;
+    top: -45px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    transition: transform 0.6s ease;
+  }
+  .gift-box.opened .gift-lid { transform: translateY(-80px) rotate(-25deg); }
+  .gift-box.opened .gift-bow { transform: translateX(-50%) translateY(-80px) rotate(45deg); }
+
+  .gift-message {
+    margin-top: 30px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: #ffd4e5;
+    opacity: 0;
+    transition: opacity 1s ease;
+    min-height: 80px;
+  }
+  .gift-message.show { opacity: 1; }
+
+  /* Modal foto */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    padding: 20px;
+  }
+  .modal.show { display: flex; animation: fadeIn 0.3s ease; }
+  .modal img {
+    max-width: 90%;
+    max-height: 85vh;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(255,126,179,0.3);
+  }
+  .modal-close {
+    position: absolute;
+    top: 20px; right: 30px;
+    font-size: 2.5rem;
+    color: white;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  /* Confetti */
+  .confetti {
+    position: fixed;
+    width: 10px; height: 10px;
+    top: -10px;
+    z-index: 150;
+    animation: fall linear forwards;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(720deg); }
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.5rem;
+    color: #ffb6d5;
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (max-width: 600px) {
+    .message { padding: 25px 20px; font-size: 1rem; }
+    .gift-box { width: 140px; height: 140px; }
+    .gallery { grid-template-columns: 1fr; padding: 0 10px; }
+    .photo { margin-bottom: 50px; }
+    .music-btn { width: 48px; height: 48px; font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hati berterbangan -->
+<div class="hearts-bg" id="heartsBg"></div>
+
+<!-- Tombol Musik -->
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Play/Pause Musik">
+  🎵
+</button>
+
+<!-- Audio Musik - GANTI src DENGAN FILE MUSIK KAMU -->
+<audio id="bgMusic" loop>
+  <source src="musik.mp3" type="audio/mpeg">
+  <!-- Alternatif: bisa pakai URL online, contoh:
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  -->
+</audio>
+
+<!-- Halaman pembuka -->
+<div class="intro" id="intro">
+   <h2>💖Agista Arnita💖</h2>
+  <h1>Ada Sesuatu Untukmu...</h1>
+  <p>Sebuah ucapan kecil dari hati yang paling dalam 💌</p>
+  <button class="open-btn" onclick="openGift()">Buka Sekarang ✨</button>
+<br><br>
+   <h1>By Zulman</h1>
+    
+</div>
+
+<!-- Konten utama -->
+<div class="main" id="main">
+
+  <!-- Ucapan utama -->
+  <div class="section">
+    <h2 class="title">Selamat Ulang Tahun, Sayangku 🌹</h2>
+    <div class="message">
+      <div class="typewriter" id="typewriter"></div>
+    </div>
+  </div>
+
+  <!-- Galeri foto -->
+  <div class="section">
+    <h2 class="title">Kenangan Kita 💕</h2>
+    <p style="font-style:italic; opacity:0.8; margin-bottom:40px;">Setiap momen bersamamu adalah hadiah terindah...</p>
+    <div class="gallery" id="gallery"></div>
+  </div>
+
+  <!-- Kado virtual -->
+  <div class="section gift-section">
+    <h2 class="title">Satu Kejutan Kecil 🎁</h2>
+    <p style="opacity:0.8;">Klik kadonya ya...</p>
+    <div class="gift-box" id="giftBox" onclick="openVirtualGift()">
+      <div class="gift-bow">🎀</div>
+      <div class="gift-lid"></div>
+      <div class="gift-body">
+        <div class="gift-ribbon-v"></div>
+        <div class="gift-ribbon-h"></div>
+      </div>
+    </div>
+    <div class="gift-message" id="giftMessage"></div>
+  </div>
+
+</div>
+
+<footer>
+ <h2>💖 Dengan sepenuh hati, untukmu selamanya 💖</h2>
+</footer>
+
+<!-- Modal foto -->
+<div class="modal" id="modal" onclick="closeModal()">
+  <button class="modal-close">&times;</button>
+  <img id="modalImg" src="" alt="">
+</div>
+
+<script>
+  // ====== KONFIGURASI - GANTI DATA DI SINI ======
+  const pesanUtama = `Hari ini adalah hari spesialmu, dan aku ingin kamu tahu... terima kasih telah lahir ke dunia ini. Terima kasih telah menjadi alasan senyumku setiap pagi, menjadi tempat pulang saat hari terasa lelah, dan menjadi cahaya di saat gelap.
+
+Di setiap tahun yang berlalu, kamu semakin indah — bukan hanya di mataku, tapi di seluruh semesta. Semoga tahun ini membawa kebahagiaan yang berlimpah, mimpi-mimpi yang terwujud, dan cinta yang tak pernah pudar.
+
+Aku beruntung bisa menjadi bagian dari ceritamu. Selamat ulang tahun, cintaku. 🌸`;
+
+  // GANTI URL FOTO DI BAWAH DENGAN FOTO KAMU
+  // Frame tersedia: 'polaroid', 'ornate', 'hearts', 'vintage'
+  const fotoData = [
+    { url: "https://picsum.photos/seed/love1/500/500", caption: "Senyummu...", frame: "polaroid" },
+    { url: "https://picsum.photos/seed/love2/500/500", caption: "Kenangan kita", frame: "ornate" },
+    { url: "https://picsum.photos/seed/love3/500/500", caption: "Momen indah", frame: "hearts" },
+    { url: "https://picsum.photos/seed/love4/500/500", caption: "Selalu bersamamu", frame: "vintage" },
+    { url: "https://picsum.photos/seed/love5/500/500", caption: "Kamu & aku", frame: "polaroid" },
+    { url: "https://picsum.photos/seed/love6/500/500", caption: "Cinta kita", frame: "ornate" },
+    { url: "https://picsum.photos/seed/love7/500/500", caption: "Bahagia bersamamu", frame: "hearts" },
+    { url: "https://picsum.photos/seed/love8/500/500", caption: "Selamanya", frame: "vintage" }
+  ];
+
+  const pesanKado = `Hadiah terbaik yang bisa kuberikan adalah waktuku, perhatianku, dan cintaku yang tulus untukmu. Aku berjanji akan selalu ada — di hari bahagia, di hari sulit, dan di setiap detik kehidupanmu. Aku mencintaimu, hari ini dan selamanya. 💝`;
+
+  // ====== LOGIKA MUSIK ======
+  const bgMusic = document.getElementById('bgMusic');
+  const musicBtn = document.getElementById('musicBtn');
+  let isPlaying = false;
+
+  bgMusic.volume = 0.5; // Volume 50%
+
+  function toggleMusic() {
+    if (isPlaying) {
+      bgMusic.pause();
+      musicBtn.textContent = '🎵';
+      musicBtn.classList.remove('playing');
+      isPlaying = false;
+    } else {
+      bgMusic.play().then(() => {
+        musicBtn.textContent = '🎶';
+        musicBtn.classList.add('playing');
+        isPlaying = true;
+      }).catch(err => {
+        console.log('Autoplay diblokir:', err);
+        alert('Klik tombol musik di pojok kanan atas untuk memutar lagu 💕');
+      });
+    }
+  }
+
+  // ====== LOGIKA LAIN ======
+
+  // Hati berterbangan
+  function createHearts() {
+    const container = document.getElementById('heartsBg');
+    const hearts = ['💖','💕','💗','🌸','✨','💝'];
+    for (let i = 0; i < 25; i++) {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      h.style.left = Math.random() * 100 + '%';
+      h.style.fontSize = (15 + Math.random() * 25) + 'px';
+      h.style.animationDuration = (8 + Math.random() * 10) + 's';
+      h.style.animationDelay = Math.random() * 10 + 's';
+      container.appendChild(h);
+    }
+  }
+  createHearts();
+
+  // Buka halaman pembuka
+  function openGift() {
+    document.getElementById('intro').classList.add('hidden');
+    setTimeout(() => {
+      document.getElementById('main').classList.add('show');
+      startTypewriter();
+      buildGallery();
+      launchConfetti(80);
+      // Coba putar musik otomatis
+      bgMusic.play().then(() => {
+        musicBtn.textContent = '🎶';
+        musicBtn.classList.add('playing');
+        isPlaying = true;
+      }).catch(() => {
+        // Jika autoplay diblokir, user bisa klik tombol musik
+      });
+    }, 500);
+  }
+
+  // Typewriter effect
+  function startTypewriter() {
+    const el = document.getElementById('typewriter');
+    const text = pesanUtama;
+    let i = 0;
+    el.innerHTML = '<span class="cursor">&nbsp;</span>';
+    const cursor = el.querySelector('.cursor');
+
+    function type() {
+      if (i < text.length) {
+        const char = text.charAt(i) === '\n' ? '<br>' : text.charAt(i);
+        cursor.insertAdjacentHTML('beforebegin', char);
+        i++;
+        setTimeout(type, text.charAt(i-1) === '\n' ? 200 : 25);
+      } else {
+        setTimeout(() => cursor.style.display = 'none', 1500);
+      }
+    }
+    setTimeout(type, 800);
+  }
+
+  // Galeri foto dengan frame berbeda
+  function buildGallery() {
+    const gallery = document.getElementById('gallery');
+    fotoData.forEach((foto, idx) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'photo';
+      wrapper.style.animation = `fadeIn 0.8s ease ${idx * 0.15}s backwards`;
+
+      let frameClass = '';
+      let cornerElements = '';
+      switch(foto.frame) {
+        case 'polaroid':
+          frameClass = 'frame-polaroid';
+          break;
+        case 'ornate':
+          frameClass = 'frame-ornate';
+          break;
+        case 'hearts':
+          frameClass = 'frame-hearts';
+          cornerElements = '<span class="corner-tl">💗</span><span class="corner-br">💗</span>';
+          break;
+        case 'vintage':
+          frameClass = 'frame-vintage';
+          break;
+        default:
+          frameClass = 'frame-polaroid';
+      }
+
+      wrapper.innerHTML = `
+        <div class="${frameClass}">
+          ${cornerElements}
+          <img src="${foto.url}" alt="${foto.caption}" loading="lazy">
+          <div class="caption">${foto.caption}</div>
+        </div>
+      `;
+      wrapper.onclick = () => openModal(foto.url);
+      gallery.appendChild(wrapper);
+    });
+  }
+
+  // Modal foto
+  function openModal(src) {
+    document.getElementById('modalImg').src = src;
+    document.getElementById('modal').classList.add('show');
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('show');
+  }
+
+  // Kado virtual
+  function openVirtualGift() {
+    const box = document.getElementById('giftBox');
+    if (box.classList.contains('opened')) return;
+    box.classList.add('opened');
+    launchConfetti(150);
+    setTimeout(() => {
+      const msg = document.getElementById('giftMessage');
+      msg.textContent = pesanKado;
+      msg.classList.add('show');
+    }, 700);
+  }
+
+  // Confetti
+  function launchConfetti(count) {
+    const colors = ['#ff6b9d','#ffd700','#ff9ec7','#c44569','#ffb6d5','#ffffff'];
+    for (let i = 0; i < count; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + '%';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.animationDuration = (2 + Math.random() * 3) + 's';
+      c.style.animationDelay = Math.random() * 0.5 + 's';
+      c.style.transform = `rotate(${Math.random() * 360}deg)`;
+      if (Math.random() > 0.5) c.style.borderRadius = '50%';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 5500);
+    }
+  }
+
+  // Tutup modal dengan ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>
+
+</body>
+</html>
